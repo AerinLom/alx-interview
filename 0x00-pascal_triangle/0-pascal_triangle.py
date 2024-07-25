@@ -2,6 +2,8 @@
 """
 This module defines a function to create Pascals triangle
 """
+
+
 def pascal_triangle(n):
     """
     Returns pascals triangle
@@ -11,14 +13,12 @@ def pascal_triangle(n):
 
     triangle = [[1]]
 
-    for level_index in range(1, n):
+    for level in range(1, n):
+        previous_level = triangle[-1]
         current_level = [1]
 
-        for element_index in range(1, level_index):
-            current_level.append(
-                triangle[level_index-1][element_index-1] +
-                triangle[level_index-1][element_index]
-            )
+        for i in range(1, level):
+            current_level.append(previous_level[i - 1] + previous_level[i])
 
         current_level.append(1)
         triangle.append(current_level)
