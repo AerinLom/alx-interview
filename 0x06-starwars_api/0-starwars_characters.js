@@ -9,7 +9,7 @@ request(url, (error, response, body) => {
     console.error('Error:', error);
     return;
   }
-  
+
   const movieInfo = JSON.parse(body);
   const characters = movieInfo.characters;
 
