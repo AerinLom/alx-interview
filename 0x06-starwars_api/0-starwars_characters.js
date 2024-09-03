@@ -9,16 +9,26 @@ request(url, (error, response, body) => {
     console.error('Error:', error);
     return;
   }
+  
   const movieInfo = JSON.parse(body);
   const characters = movieInfo.characters;
-  characters.forEach(characterUrl => {
-    request(characterUrl, (error, response, body) => {
-      if (error) {
-        console.error('Error:', error);
-        return;
-      }
-      const characterInfo = JSON.parse(body);
-      console.log(characterInfo.name);
+
+  const characterPromises = characters.map(characterUrl => {
+    return new Promise((resolve, reject) => {
+      request(characterUrl, (error, response, body) => {
+        if (error) {
+          reject(error);
+        } else {
+          const characterInfo = JSON.parse(body);
+          resolve(characterInfo.name);
+        }
+      });
     });
   });
+
+  Promise.all(characterPromises)
+    .then(characterNames => {
+      characterNames.forEach(name => console.log(name));
+    })
+    .catch(error => console.error('Error:', error));
 });
